@@ -1,8 +1,6 @@
 const axios = require('axios'); // Import the Axios library
 const { NodeSSH } = require('node-ssh');
 const fs = require('fs');
-const { Client } = require('ssh2');
-const http = require('http');
 
 // Initialize the SSH client
 const ssh = new NodeSSH();
