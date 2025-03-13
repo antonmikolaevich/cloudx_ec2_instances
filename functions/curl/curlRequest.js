@@ -44,7 +44,7 @@ async function establishTunnel() {
   try {
     // Connect to the public EC2 instance (bastion host)
     await ssh.connect({
-      host: 'ec2-35-159-81-67.eu-central-1.compute.amazonaws.com', // Bastion host
+      host: 'ec2-3-76-47-170.eu-central-1.compute.amazonaws.com', // Bastion host
       username: 'ec2-user', // Default Amazon Linux username
       privateKey: fs.readFileSync('./cloudxinfo-eu-central-1.pem', 'utf8'), // Path to the private key file
     });
@@ -55,7 +55,7 @@ async function establishTunnel() {
     const forwardConfig = {
       localHost: '127.0.0.1',
       localPort: 8888,
-      remoteHost: '10.0.251.222',
+      remoteHost: '10.0.235.37',
       remotePort: 80,
     };
 
@@ -110,11 +110,17 @@ async function closeTunnel() {
 
 async function curlPublicIP(url) {
     try {
+      let finalResponse = [];
       console.log(`Calling URL: ${url}`);
       const response = await axios.get(url); // Perform a GET request
       console.log(`Response from ${url}:`);
+      console.log(JSON.stringify(response.headers));
+      console.log(`===========================================================`)
+      console.log(`===========================================================`)
       console.log( `our data is ${JSON.stringify(response.data)}`); // Log the response data
-      return JSON.stringify(response.data);
+      finalResponse.push(JSON.stringify(response.data));
+      finalResponse.push(JSON.stringify(response.headers));
+      return finalResponse
     } catch (err) {
       console.error(`Error calling ${url}:`, err.message);
     }

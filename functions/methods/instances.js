@@ -24,38 +24,52 @@ async function getPublicEC2InstancesIP() {
     // Step 3: Iterate over the reservations and filter private instances
     response.Reservations.forEach((reservation) => {
       reservation.Instances.forEach((instance) => {
-        // Check if the instance does not have a public IP address
-        if (instance.IamInstanceProfile.Arn.includes('Public')){
+        if ((instance.State.Name === 'running')){
+          console.log(instance);
+        }
+  
+        if ((instance.State.Name === 'running') && (instance.IamInstanceProfile.Arn.includes('Public'))){
           privateInstances.push(instance.PublicIpAddress);
         }
       });
     });
 return privateInstances;
   } catch (error) {
-    throw new Error(err.message);
+    throw new Error(error.message);
   }
 }
 
 
   async function getPrivateEC2InstancesIP() {
     try {
-      // Step 2: Use describeInstances to fetch all EC2 instances
-      const response = await ec2.describeInstances().promise();
-
+      // Describe EC2 instances
+      const data = await ec2.describeInstances().promise();
+  
+      // Array to hold private instances
       const privateInstances = [];
   
-      // Step 3: Iterate over the reservations and filter private instances
-      response.Reservations.forEach((reservation) => {
-        reservation.Instances.forEach((instance) => {
-          // Check if the instance does not have a public IP address
-          if (instance.IamInstanceProfile.Arn.includes('Private')){
-            privateInstances.push(instance.PrivateIpAddress);
+      // Iterate through instances
+      for (const reservation of data.Reservations) {
+        for (const instance of reservation.Instances) {
+          console.log(instance)
+          if (instance.State.Name === 'running') {
+            // Check if PublicIpAddress is missing, indicating that the instance is private
+            if (!instance.PublicIpAddress) {
+              privateInstances.push({
+                InstanceId: instance.InstanceId,
+                PrivateIpAddress: instance.PrivateIpAddress,
+                State: instance.State.Name,
+              });
+            }
           }
-        });
-      });
-  return privateInstances;
-    } catch (error) {
-      throw new Error(err.message);
+        }
+      }
+  
+      // Log the private instances
+      console.log('Private EC2 Instances:', privateInstances);
+      return privateInstances;
+    } catch (err) {
+      console.error('Error retrieving EC2 instances:', err);
     }
   }
 
@@ -77,7 +91,7 @@ return privateInstances;
       });
   return privateInstances;
     } catch (error) {
-      throw new Error(err.message);
+      throw new Error(error.message);
     }
   }
 
@@ -102,7 +116,7 @@ return privateInstances;
       });
   return privateInstances;
     } catch (error) {
-      throw new Error(err.message);
+      throw new Error(error.message);
     }
   }
 
@@ -219,7 +233,7 @@ return privateInstances;
           return finalRes
         }
         } catch (error) {
-          throw new Error(err.message);
+          throw new Error(error.message);
         }
       }  
 
@@ -248,7 +262,7 @@ return privateInstances;
             return finalRes;
           }
         } catch (error) {
-          throw new Error(err.message);
+          throw new Error(error.message);
         }
       } 
 

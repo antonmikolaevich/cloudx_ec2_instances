@@ -28,7 +28,16 @@ function deepEqual(obj1, obj2) {
     return keys.every(key => objectKeys.includes(key));
   }
 
+  function getContentTypeValue(object, key){
+    if (object.hasOwnProperty(key) === true){
+      return object[key];
+    } else {
+      return 'no value';
+    }
+  }
+
   module.exports = {
     deepEqual,
-    hasMatchingKeys
+    hasMatchingKeys,
+    getContentTypeValue
   }

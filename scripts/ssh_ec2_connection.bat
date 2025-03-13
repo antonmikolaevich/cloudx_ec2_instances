@@ -2,12 +2,12 @@
 
 set COMMAND=%1
 
-set KEY_ID=key-0cce3b3dd1c1621ea
+set KEY_ID=key-0640bd7cba5377704
 set STACK=cloudxinfo
 set REGION=eu-central-1
-set PUBLIC_INSTANCE_PUBLIC_DNS=ec2-35-159-81-67.eu-central-1.compute.amazonaws.com
+set PUBLIC_INSTANCE_PUBLIC_DNS=ec2-3-76-47-170.eu-central-1.compute.amazonaws.com
 
-set PRIVATE_INSTANCE_PRIVATE_IP=10.0.251.222
+set PRIVATE_INSTANCE_PRIVATE_IP=10.0.235.37
 set PRIVATE_INSTANCE_HTTP_PORT=80
 set LOCAL_HTTP_CONNECTION_PORT=8888
 
